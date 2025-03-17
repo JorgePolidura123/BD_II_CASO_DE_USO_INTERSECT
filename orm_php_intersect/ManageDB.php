@@ -3,18 +3,16 @@ include_once 'DB.php';
 class ManageBD extends DB{
   public function getQueries(){
 
-	$intersect = $this->connect()->query("
-    SELECT edificio FROM departamento WHERE id_departamento = 'BIOLOGY'
-    INTERSECT
-    SELECT edificio FROM departamento WHERE id_departamento = 'HISTORY'
-");
- 
+	$course = $this->connect()->query("SELECT * FROM course");
+	$takes = $this->connect()->query("SELECT * FROM takes");
+	$sum = $this->connect()->query("SELECT DISTINCT SUM(credits) as sum FROM course c INNER JOIN takes t WHERE c.course_id = t.course_id COLLATE utf8mb4_unicode_ci;");
 	
 	$queries = array (
-		"intersect"=>$intersect
+		"sum"=>$sum,
+		"course"=>$course,
+		"takes"=>$takes
 	);
-	
-		return $queries;
+	return $queries;
 	
 	}
 }
